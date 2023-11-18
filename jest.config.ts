@@ -6,6 +6,7 @@
 import type { Config } from 'jest';
 
 const config: Config = {
+  modulePaths: ['node_modules', '<rootDir>/src'],
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -73,9 +74,7 @@ const config: Config = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   "node_modules"
-  // ],
+  moduleDirectories: ['node_modules', '<rootDir>'],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
