@@ -1,5 +1,13 @@
-<app-search-input (searchChange)="onSearchChange($event)"></app-search-input>
-<button class="add-button" (click)="navigateToAddProduct()">Agregar</button>
+<div class="top-table">
+  <div class="search-table">
+    <app-search-input
+      (searchChange)="onSearchChange($event)"></app-search-input>
+  </div>
+  <div class="add-table">
+    <button class="add-button" (click)="navigateToAddProduct()">Agregar</button>
+  </div>
+</div>
+
 <div class="table-responsive custom-table">
   <table class="table">
     <thead>
@@ -9,6 +17,7 @@
         <th class="table-header-description">Descripción</th>
         <th class="table-header-release">Fecha de liberación</th>
         <th class="table-header-revision">Fecha de reestructuración</th>
+        <th class="table-header-menu"></th>
       </tr>
     </thead>
     <tbody>
@@ -31,19 +40,43 @@
         <td class="table-data-revision">
           {{ product.date_revision | date: 'mediumDate' }}
         </td>
-        <td>
-          <button class="edit-button" (click)="navigateToEditProduct(product)">
-            Edit
-          </button>
+        <td class="table-menu">
+          <div class="dropdown">
+            <button
+              class="dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false">
+              ⋮
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a
+                class="dropdown-item"
+                href="#"
+                (click)="navigateToEditProduct(product)"
+                >Edit</a
+              >
+              <a
+                class="dropdown-item"
+                href="#"
+                (click)="deleteProduct(product.id)"
+                >Remove</a
+              >
+            </div>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
-  <app-pagination-control
-    [currentPage]="currentPage"
-    [totalPages]="totalPages"
-    (previous)="onPrevious()"
-    (next)="onNext()"
-    (pageSizeChange)="onPageSizeChange($event)">
-  </app-pagination-control>
+  <div class="pagination-container">
+    <app-pagination-control
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (previous)="onPrevious()"
+      (next)="onNext()"
+      (pageSizeChange)="onPageSizeChange($event)">
+    </app-pagination-control>
+  </div>
 </div>

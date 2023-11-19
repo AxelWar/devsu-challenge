@@ -125,10 +125,9 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/financial-products/product-register']);
   }
 
-  deleteProduct() {
-    const productId = 'trj-crd'; // The ID of the product to delete
-
-    this.financialProductsService.deleteFinancialProduct(productId).subscribe(
+  deleteProduct(productId: string) {
+    console.log(`Deleting product with ID ${productId}`);
+    /*     this.financialProductsService.deleteFinancialProduct(productId).subscribe(
       () => {
         console.log(`Product with ID ${productId} has been deleted.`);
         // Handle the successful deletion
@@ -137,7 +136,7 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
         console.error('Error deleting product:', error);
         // Handle the error
       }
-    );
+    ); */
   }
 
   ngOnDestroy() {
