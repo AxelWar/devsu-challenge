@@ -4,6 +4,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { NavbarComponent } from './navbar/navbar.component';
 import { PaginationControlComponent } from './pagination-control/pagination-control.component';
 import { SearchInputComponent } from './search-input/search-input.component';
+import { TooltipIconComponent } from './tooltip-icon/tooltip-icon.component';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import { SearchInputComponent } from './search-input/search-input.component';
     NavbarComponent,
     SearchInputComponent,
     PaginationControlComponent,
+    TooltipIconComponent,
   ],
   imports: [CommonModule],
   exports: [
@@ -18,6 +20,7 @@ import { SearchInputComponent } from './search-input/search-input.component';
     NavbarComponent,
     SearchInputComponent,
     PaginationControlComponent,
+    TooltipIconComponent,
   ],
 })
 export class SharedModule {}

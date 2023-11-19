@@ -8,68 +8,81 @@
   </div>
 </div>
 
-<div class="table-responsive custom-table">
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="table-header-logo">Logo</th>
-        <th class="table-header-product">Nombre del producto</th>
-        <th class="table-header-description">Descripción</th>
-        <th class="table-header-release">Fecha de liberación</th>
-        <th class="table-header-revision">Fecha de reestructuración</th>
-        <th class="table-header-menu"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of displayedProducts">
-        <td class="table-data-logo">
-          <img
-            class="product-logo"
-            [src]="
-              isValidUrl(product.logo)
-                ? product.logo
-                : '../../../../assets/images/no-image.png'
-            "
-            alt="Product Logo" />
-        </td>
-        <td class="table-data-product">{{ product.name }}</td>
-        <td class="table-data-description">{{ product.description }}</td>
-        <td class="table-data-release">
-          {{ product.date_release | date: 'mediumDate' }}
-        </td>
-        <td class="table-data-revision">
-          {{ product.date_revision | date: 'mediumDate' }}
-        </td>
-        <td class="table-menu">
-          <div class="dropdown">
-            <button
-              class="dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false">
-              ⋮
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a
-                class="dropdown-item"
-                href="#"
-                (click)="navigateToEditProduct(product)"
-                >Edit</a
-              >
-              <a
-                class="dropdown-item"
-                href="#"
-                (click)="deleteProduct(product.id)"
-                >Remove</a
-              >
+<div class="custom-table">
+  <div class="table-responsive custom-table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="table-header-logo">Logo</th>
+          <th class="table-header-product">Nombre del producto</th>
+          <th class="table-header-description">
+            Descripción
+            <app-tooltip-icon [tooltipText]="'Descripción'"></app-tooltip-icon>
+          </th>
+          <th class="table-header-release">
+            Fecha de liberación
+            <app-tooltip-icon
+              [tooltipText]="'Fecha de liberación'"></app-tooltip-icon>
+          </th>
+          <th class="table-header-revision">
+            Fecha de reestructuración
+            <app-tooltip-icon
+              [tooltipText]="'Fecha de reestructuración'"></app-tooltip-icon>
+          </th>
+          <th class="table-header-menu"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of displayedProducts">
+          <td class="table-data-logo">
+            <img
+              class="product-logo"
+              [src]="
+                isValidUrl(product.logo)
+                  ? product.logo
+                  : '../../../../assets/images/no-image.png'
+              "
+              alt="Product Logo" />
+          </td>
+          <td class="table-data-product">{{ product.name }}</td>
+          <td class="table-data-description">{{ product.description }}</td>
+          <td class="table-data-release">
+            {{ product.date_release | date: 'mediumDate' }}
+          </td>
+          <td class="table-data-revision">
+            {{ product.date_revision | date: 'mediumDate' }}
+          </td>
+          <td class="table-menu">
+            <div class="dropdown">
+              <button
+                class="dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                ⋮
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  (click)="navigateToEditProduct(product)"
+                  >Edit</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  (click)="deleteProduct(product.id)"
+                  >Remove</a
+                >
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="pagination-container">
     <app-pagination-control
       [currentPage]="currentPage"
