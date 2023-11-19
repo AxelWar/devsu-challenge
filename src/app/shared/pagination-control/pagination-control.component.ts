@@ -7,8 +7,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class PaginationControlComponent {
   @Input() currentPage = 1;
-  @Input() pageSize = 10;
+  @Input() pageSize = 5;
   @Input() totalPages = 1;
+  @Input() totalResults = 0;
   @Output() pageChanged = new EventEmitter<{ page: number; size: number }>();
   @Output() pageSizeChange = new EventEmitter<number>(); // Declare the pageSizeChange output
 
@@ -30,9 +31,7 @@ export class PaginationControlComponent {
     const selectElement = event.target as HTMLSelectElement | null;
     if (selectElement) {
       const newSize = Number(selectElement.value);
-      this.pageSizeChange.emit(newSize); // Emit the pageSizeChange event
-    } else {
-      console.warn('Select element is null');
+      this.pageSizeChange.emit(newSize);
     }
   }
 

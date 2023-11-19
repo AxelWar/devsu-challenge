@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of financialProducts">
+      <tr *ngFor="let product of displayedProducts">
         <td class="table-data-logo">
           <img
             class="product-logo"
@@ -74,8 +74,9 @@
     <app-pagination-control
       [currentPage]="currentPage"
       [totalPages]="totalPages"
-      (previous)="onPrevious()"
-      (next)="onNext()"
+      [pageSize]="itemsPerPage"
+      [totalResults]="totalResults"
+      (pageChanged)="onPageChanged($event)"
       (pageSizeChange)="onPageSizeChange($event)">
     </app-pagination-control>
   </div>
