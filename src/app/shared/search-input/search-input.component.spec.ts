@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SearchInputComponent } from './search-input.component';
 import { SharedModule } from '../shared.module';
-import { TableProductsComponent } from './table-products.component';
 
-describe('TableProductsComponent', () => {
-  let component: TableProductsComponent;
-  let fixture: ComponentFixture<TableProductsComponent>;
+describe('SearchInputComponent', () => {
+  let component: SearchInputComponent;
+  let fixture: ComponentFixture<SearchInputComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TableProductsComponent],
+      declarations: [SearchInputComponent],
       imports: [SharedModule],
     });
-    fixture = TestBed.createComponent(TableProductsComponent);
+    fixture = TestBed.createComponent(SearchInputComponent);
     component = fixture.componentInstance;
   });
 
