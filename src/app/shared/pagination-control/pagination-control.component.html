@@ -1,0 +1,15 @@
+<div class="pagination-control">
+  <!-- Paginator -->
+  <button (click)="onPrevious()" [disabled]="currentPage <= 1">Previous</button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="onNext()" [disabled]="currentPage >= totalPages">
+    Next
+  </button>
+
+  <!-- Page Size Selection -->
+  <select (change)="onPageSizeChange($event)">
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="20">20</option>
+  </select>
+</div>

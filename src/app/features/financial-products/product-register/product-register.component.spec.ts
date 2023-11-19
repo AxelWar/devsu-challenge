@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { ProductRegisterComponent } from './product-register.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ProductRegisterComponent', () => {
   let component: ProductRegisterComponent;
@@ -9,7 +10,7 @@ describe('ProductRegisterComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ProductRegisterComponent],
-      imports: [SharedModule],
+      imports: [SharedModule, HttpClientTestingModule],
     });
     fixture = TestBed.createComponent(ProductRegisterComponent);
     component = fixture.componentInstance;

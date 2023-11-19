@@ -1,1 +1,49 @@
-Im working
+<app-search-input (searchChange)="onSearchChange($event)"></app-search-input>
+<button class="add-button" (click)="navigateToAddProduct()">Agregar</button>
+<div class="table-responsive custom-table">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="table-header-logo">Logo</th>
+        <th class="table-header-product">Nombre del producto</th>
+        <th class="table-header-description">Descripción</th>
+        <th class="table-header-release">Fecha de liberación</th>
+        <th class="table-header-revision">Fecha de reestructuración</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of financialProducts">
+        <td class="table-data-logo">
+          <img
+            class="product-logo"
+            [src]="
+              isValidUrl(product.logo)
+                ? product.logo
+                : '../../../../assets/images/no-image.png'
+            "
+            alt="Product Logo" />
+        </td>
+        <td class="table-data-product">{{ product.name }}</td>
+        <td class="table-data-description">{{ product.description }}</td>
+        <td class="table-data-release">
+          {{ product.date_release | date: 'mediumDate' }}
+        </td>
+        <td class="table-data-revision">
+          {{ product.date_revision | date: 'mediumDate' }}
+        </td>
+        <td>
+          <button class="edit-button" (click)="navigateToEditProduct(product)">
+            Edit
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <app-pagination-control
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (previous)="onPrevious()"
+    (next)="onNext()"
+    (pageSizeChange)="onPageSizeChange($event)">
+  </app-pagination-control>
+</div>

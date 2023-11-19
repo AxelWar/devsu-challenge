@@ -9,6 +9,11 @@ const routes: Routes = [
         m => m.FinancialProductsModule
       ),
   },
+  {
+    path: '',
+    redirectTo: '/financial-products',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
