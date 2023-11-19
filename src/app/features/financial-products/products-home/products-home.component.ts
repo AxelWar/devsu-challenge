@@ -50,30 +50,31 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
       });
   }
 
+  get totalResults() {
+    return this.filteredProducts.length;
+  }
+
   applyFilter() {
-    if (this.searchQuery) {
-      this.filteredProducts = this.financialProducts.filter(
-        product =>
-          product.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          product.description
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase())
-      );
-    } else {
-      this.filteredProducts = [...this.financialProducts];
-    }
-    this.applyPagination();
+    this.filteredProducts = this.searchQuery
+      ? this.financialProducts.filter(
+          product =>
+            product.name.toLowerCase().includes(this.searchQuery) ||
+            product.description.toLowerCase().includes(this.searchQuery)
+        )
+      : [...this.financialProducts];
+    this.updatePagination();
   }
 
   onSearchChange(query: string) {
-    this.searchQuery = query;
+    this.searchQuery = query.toLowerCase();
     this.currentPage = 1;
     this.applyFilter();
   }
 
   onPageSizeChange(newSize: number) {
     this.itemsPerPage = newSize;
-    this.applyPagination();
+    this.currentPage = 1;
+    this.updatePagination();
   }
 
   applyPagination() {
@@ -96,14 +97,16 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateTotalPages() {
-    this.totalPages = Math.ceil(
-      this.filteredProducts.length / this.itemsPerPage
-    );
+  onPageChanged(event: { page: number; size: number }) {
+    this.currentPage = event.page;
+    this.itemsPerPage = event.size;
+    this.applyPagination();
   }
 
   updatePagination() {
-    this.calculateTotalPages();
+    this.totalPages = Math.ceil(
+      this.filteredProducts.length / this.itemsPerPage
+    );
     this.applyPagination();
   }
 
