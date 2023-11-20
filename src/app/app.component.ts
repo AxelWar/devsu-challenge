@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   constructor(private router: Router) {}
-  title = 'devsu-challenge';
 
   goToFinancialProducts() {
     this.router.navigate(['financial-products']);

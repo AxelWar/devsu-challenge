@@ -9,7 +9,6 @@ export class SearchInputComponent {
   @Output() searchChange = new EventEmitter<string>();
 
   onSearchChange(event: Event) {
-    // Type assert the target to HTMLInputElement
     const target = event.target as HTMLInputElement;
     this.searchChange.emit(target.value);
   }
