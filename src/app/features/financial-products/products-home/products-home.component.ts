@@ -19,7 +19,7 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   errorMessage!: string;
   filteredProducts: FinancialProduct[] = [];
   searchQuery = '';
-  itemsPerPage = 5; // Default items per page
+  itemsPerPage = 5;
   currentPage = 1;
   displayedProducts: FinancialProduct[] = [emptyFinancialProduct];
   totalPages = 1;
@@ -120,7 +120,7 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   }
 
   navigateToAddProduct() {
-    this.router.navigate(['/financial-products/product-register']); // Adjust the route as needed
+    this.router.navigate(['/financial-products/product-register']);
   }
 
   navigateToEditProduct(product: FinancialProduct) {
