@@ -19,7 +19,6 @@ import { Router } from '@angular/router';
 })
 export class ProductRegisterComponent implements OnInit, OnDestroy {
   productForm!: FormGroup;
-  originalFormData: FinancialProduct | null = null;
   editMode = false;
   constructor(
     private fb: FormBuilder,
@@ -82,7 +81,7 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
       control?.markAsTouched({ onlySelf: true });
     });
 
-    this.productForm.valueChanges.subscribe(val => {
+    this.productForm.valueChanges.subscribe(() => {
       const formValueIncludingDisabled = {
         ...this.productForm.getRawValue(),
         id: this.productForm.get('id')?.value,
