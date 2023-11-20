@@ -18,7 +18,10 @@
   </div>
 
   <div class="page-size">
-    <select (change)="onPageSizeChange($event)">
+    <select
+      id="page-selector"
+      name="page-selector"
+      (change)="onPageSizeChange($event)">
       <option value="5">5</option>
       <option value="10">10</option>
       <option value="20">20</option>

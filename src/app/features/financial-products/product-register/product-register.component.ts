@@ -10,6 +10,7 @@ import {
 import { Observable, catchError, map, of } from 'rxjs';
 import { FinancialProduct } from 'src/app/shared/interfaces/financial-product.interface';
 import { FinancialProductsService } from '../../../shared/services/financial-products.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-register',
@@ -22,28 +23,20 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
   editMode = false;
   constructor(
     private fb: FormBuilder,
-    private financialProductsService: FinancialProductsService
+    private financialProductsService: FinancialProductsService,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.loadEditMode();
     this.initializeForm();
     this.setupDateRevisionListener();
-    this.loadEditMode();
     this.loadFormData();
     this.loadCurrentProduct();
   }
 
   initializeForm() {
     this.productForm = this.fb.group({
-      id: [
-        { value: '', disabled: this.editMode },
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(10),
-        ],
-        this.validateProductID(this.financialProductsService),
-      ],
       name: [
         '',
         [
@@ -64,7 +57,24 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
       date_release: ['', Validators.required],
       date_revision: [{ value: '', disabled: true }],
     });
+    const idValidators = [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(10),
+    ];
 
+    const idAsyncValidators = !this.editMode
+      ? this.validateProductID(this.financialProductsService)
+      : [];
+
+    this.productForm.addControl(
+      'id',
+      this.fb.control(
+        { value: '', disabled: this.editMode },
+        idValidators,
+        idAsyncValidators
+      )
+    );
     this.setupDateRevisionListener();
 
     Object.keys(this.productForm.controls).forEach(field => {
@@ -128,7 +138,6 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
         date_revision: this.formatDateForInput(currentProduct.date_revision),
       });
 
-      // Store the original data in localStorage if it's not already stored
       if (!localStorage.getItem('originalProductData')) {
         localStorage.setItem(
           'originalProductData',
@@ -148,7 +157,7 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
           const revisionDate = this.calculateDateRevision(releaseDate);
           this.productForm
             .get('date_revision')
-            ?.setValue(revisionDate, { emitEvent: false }); // Set the value without emitting an event to avoid loop
+            ?.setValue(revisionDate, { emitEvent: false });
         }
       });
   }
@@ -166,26 +175,27 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.productForm);
-    console.log(this.editMode);
     if (this.productForm.valid) {
       const productData: FinancialProduct = this.productForm.getRawValue(); // Use getRawValue to include disabled fields
       productData.date_revision = this.calculateDateRevision(
         productData.date_release
       );
-
       if (this.editMode) {
         this.financialProductsService
           .updateFinancialProduct(productData)
-          .subscribe
-          // Handle response
-          ();
+          .subscribe(res => {
+            if (res) {
+              this.router.navigate(['/financial-products']);
+            }
+          });
       } else {
         this.financialProductsService
           .createFinancialProduct(productData)
-          .subscribe
-          // Handle response
-          ();
+          .subscribe(res => {
+            if (res) {
+              this.router.navigate(['/financial-products']);
+            }
+          });
       }
     }
   }

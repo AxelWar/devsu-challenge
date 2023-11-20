@@ -19,6 +19,7 @@
 
 .tooltip-icon-container::after {
   content: attr(data-tooltip);
+  border: 1px solid #494949;
   visibility: hidden;
   opacity: 0;
   width: auto;
