@@ -4,11 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { mockProduct } from '../../../shared/mocks/financial-product.mock';
-import { FinancialProductsServiceStub } from '../../../shared/mocks/financial-products.service.mock';
-import { LocalStorageMock } from '../../../shared/mocks/local-storage.mock';
-import { FinancialProductsService } from '../../../shared/services/financial-products.service';
+import { mockProduct } from 'src/app/shared/mocks/financial-product.mock';
+import { FinancialProductsService } from 'src/app/shared/services/financial-products.service';
 import { ProductRegisterComponent } from './product-register.component';
+import { FinancialProductsServiceStub } from 'src/app/shared/mocks/financial-products.mock.service';
+import { LocalStorageMock } from 'src/app/shared/mocks/local-storage.mock.service';
 
 describe('ProductRegisterComponent', () => {
   let component: ProductRegisterComponent;
@@ -86,6 +86,7 @@ describe('ProductRegisterComponent', () => {
   });
 
   it('should call createFinancialProduct and navigate on a valid submission for a new product submit', () => {
+    component.ngOnInit();
     component.editMode = false;
     component.productForm.controls['id'].setValue('001');
     component.productForm.controls['name'].setValue('Test Product');
