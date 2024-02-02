@@ -9,3 +9,12 @@ export const emptyFinancialProduct: FinancialProduct = {
   date_release: '',
   date_revision: '',
 };
+
+export const mockProduct: FinancialProduct = {
+  id: '001',
+  name: 'Test Product',
+  description: 'Test Description',
+  logo: 'Test Logo URL',
+  date_release: '2021-01-01',
+  date_revision: '2022-01-01',
+};

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidatorFn,
@@ -7,10 +7,10 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, Subscription, catchError, map, of } from 'rxjs';
 import { FinancialProduct } from 'src/app/shared/interfaces/financial-product.interface';
 import { FinancialProductsService } from '../../../shared/services/financial-products.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-register',
@@ -20,10 +20,12 @@ import { Router } from '@angular/router';
 export class ProductRegisterComponent implements OnInit, OnDestroy {
   productForm!: FormGroup;
   editMode = false;
+  formSubscription!: Subscription;
   constructor(
     private fb: FormBuilder,
     private financialProductsService: FinancialProductsService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit() {
@@ -81,7 +83,7 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
       control?.markAsTouched({ onlySelf: true });
     });
 
-    this.productForm.valueChanges.subscribe(() => {
+    this.formSubscription = this.productForm.valueChanges.subscribe(() => {
       const formValueIncludingDisabled = {
         ...this.productForm.getRawValue(),
         id: this.productForm.get('id')?.value,
@@ -184,7 +186,9 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
           .updateFinancialProduct(productData)
           .subscribe(res => {
             if (res) {
-              this.router.navigate(['/financial-products']);
+              this.ngZone
+                .run(() => this.router.navigate(['/financial-products']))
+                .then();
             }
           });
       } else {
@@ -192,7 +196,9 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
           .createFinancialProduct(productData)
           .subscribe(res => {
             if (res) {
-              this.router.navigate(['/financial-products']);
+              this.ngZone
+                .run(() => this.router.navigate(['/financial-products']))
+                .then();
             }
           });
       }
@@ -223,10 +229,11 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.financialProductsService.setCurrentProduct(null);
     localStorage.removeItem('productFormData');
     localStorage.removeItem('originalProductData');
     localStorage.removeItem('productEditState');
+    this.formSubscription.unsubscribe();
   }
 }
