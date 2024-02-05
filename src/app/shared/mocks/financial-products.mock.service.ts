@@ -1,4 +1,4 @@
-import { Observable, of, EMPTY } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { FinancialProduct } from '../interfaces/financial-product.interface';
 
 export class FinancialProductsServiceStub {
@@ -8,7 +8,7 @@ export class FinancialProductsServiceStub {
     if (productId.length > 0) {
       return of(false);
     } else {
-      return EMPTY;
+      return of(true);
     }
   }
 
@@ -21,6 +21,7 @@ export class FinancialProductsServiceStub {
   updateFinancialProduct(
     product: FinancialProduct
   ): Observable<FinancialProduct> {
+    this.currentProduct = product;
     return of(product);
   }
 

@@ -18,9 +18,7 @@ export class FinancialProductsService {
   private url = `${environment.apiUrl}/bp/products`;
   private authorId = '1';
   private headers = new HttpHeaders().set('authorId', this.authorId);
-  private currentProductSubject = new BehaviorSubject<FinancialProduct | null>(
-    null
-  );
+  currentProductSubject = new BehaviorSubject<FinancialProduct | null>(null);
   constructor(private http: HttpClient) {}
 
   getCurrentProduct(): FinancialProduct | null {
@@ -54,7 +52,7 @@ export class FinancialProductsService {
       .pipe(catchError(this.handleError));
   }
 
-  /*   deleteFinancialProduct(productId: string): Observable<string> {
+  deleteFinancialProduct(productId: string): Observable<string> {
     const url = `${this.apiUrl}/${productId}`;
     return this.http
       .delete<string>(url, {
@@ -62,7 +60,7 @@ export class FinancialProductsService {
         responseType: 'text' as 'json',
       })
       .pipe(catchError(this.handleError));
-  } */
+  }
 
   verifyFinancialProduct(productId: string): Observable<boolean> {
     const params = new HttpParams()
