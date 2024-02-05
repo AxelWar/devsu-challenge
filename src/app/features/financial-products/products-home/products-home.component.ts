@@ -129,17 +129,15 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct(productId: string) {
-    console.log(`Deleting product with ID ${productId}`);
-    /*     this.financialProductsService.deleteFinancialProduct(productId).subscribe(
-      () => {
-        console.log(`Product with ID ${productId} has been deleted.`);
-        // Handle the successful deletion
+    this.financialProductsService.deleteFinancialProduct(productId).subscribe({
+      next: () => {
+        this.fetchFinancialProducts();
       },
-      error => {
-        console.error('Error deleting product:', error);
-        // Handle the error
-      }
-    ); */
+      error: error => {
+        this.errorMessage = error.message;
+        console.error('There was an error!', error);
+      },
+    });
   }
 
   ngOnDestroy() {
