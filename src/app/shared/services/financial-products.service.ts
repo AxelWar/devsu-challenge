@@ -53,11 +53,12 @@ export class FinancialProductsService {
   }
 
   deleteFinancialProduct(productId: string): Observable<string> {
-    const url = `${this.apiUrl}/${productId}`;
     return this.http
-      .delete<string>(url, {
-        headers: this.headers,
-        responseType: 'text' as 'json',
+      .delete(`${this.apiUrl}?id=${productId}`, {
+        headers: {
+          authorId: '1',
+        },
+        responseType: 'text',
       })
       .pipe(catchError(this.handleError));
   }
