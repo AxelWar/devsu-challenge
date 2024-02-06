@@ -4,7 +4,9 @@
       (searchChange)="onSearchChange($event)"></app-search-input>
   </div>
   <div class="add-table">
-    <button class="add-button" (click)="navigateToAddProduct()">Agregar</button>
+    <button class="add-button" id="add-button" (click)="navigateToAddProduct()">
+      Agregar
+    </button>
   </div>
 </div>
 
@@ -65,13 +67,15 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a
-                  class="dropdown-item"
+                  class="dropdown-item edit-item"
+                  id="edit-item"
                   href="/financial-products/product-register"
                   (click)="navigateToEditProduct(product)"
                   >Edit</a
                 >
                 <a
-                  class="dropdown-item"
+                  class="dropdown-item delete-item"
+                  id="delete-item"
                   [routerLink]=""
                   (click)="deleteProduct(product.id)"
                   >Remove</a

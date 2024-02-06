@@ -83,20 +83,6 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     this.displayedProducts = this.filteredProducts.slice(startIndex, endIndex);
   }
 
-  onPrevious() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.applyPagination();
-    }
-  }
-
-  onNext() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.applyPagination();
-    }
-  }
-
   onPageChanged(event: { page: number; size: number }) {
     this.currentPage = event.page;
     this.itemsPerPage = event.size;
@@ -132,10 +118,6 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     this.financialProductsService.deleteFinancialProduct(productId).subscribe({
       next: () => {
         this.fetchFinancialProducts();
-      },
-      error: error => {
-        this.errorMessage = error.message;
-        console.error('There was an error!', error);
       },
     });
   }
