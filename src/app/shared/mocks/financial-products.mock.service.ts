@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { FinancialProduct } from '../interfaces/financial-product.interface';
+import { mockProduct } from './financial-product.mock';
 
 export class FinancialProductsServiceStub {
   currentProduct: FinancialProduct | null = null;
@@ -31,5 +32,13 @@ export class FinancialProductsServiceStub {
 
   setCurrentProduct(product: FinancialProduct | null): void {
     this.currentProduct = product;
+  }
+
+  deleteFinancialProduct(productId: string): Observable<string> {
+    return of(`${productId} Deleted Successfully`);
+  }
+
+  getFinancialProducts(): Observable<FinancialProduct[]> {
+    return of([mockProduct]);
   }
 }

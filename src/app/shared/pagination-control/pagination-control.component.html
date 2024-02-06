@@ -4,6 +4,7 @@
   <div class="page-navigation">
     <button
       class="nav-button"
+      id="previuos-page"
       (click)="onPrevious()"
       [disabled]="currentPage <= 1">
       Prev
@@ -11,6 +12,7 @@
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
     <button
       class="nav-button"
+      id="next-page"
       (click)="onNext()"
       [disabled]="currentPage >= totalPages">
       Next

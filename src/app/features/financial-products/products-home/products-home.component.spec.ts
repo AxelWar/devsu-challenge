@@ -1,103 +1,148 @@
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
+import { mockProducts } from 'src/app/shared/mocks/financial-product.mock';
+import { FinancialProductsServiceStub } from 'src/app/shared/mocks/financial-products.mock.service';
 import { FinancialProductsService } from '../../../shared/services/financial-products.service';
-import { ProductsHomeComponent } from './products-home.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { ProductsHomeComponent } from './products-home.component';
 
-const products = [
-  {
-    id: '00122',
-    name: 'Test Product',
-    description: 'Test Description',
-    logo: 'Test Logo URL',
-    date_release: '2021-01-01',
-    date_revision: '2022-01-01',
-  },
-  {
-    id: '00133',
-    name: 'Test Product',
-    description: 'Test Description',
-    logo: 'Test Logo URL',
-    date_release: '2021-01-01',
-    date_revision: '2022-01-01',
-  },
-];
 describe('ProductsHomeComponent', () => {
   let component: ProductsHomeComponent;
   let fixture: ComponentFixture<ProductsHomeComponent>;
-  let mockFinancialProductsService: any;
-  let mockRouter: any;
-  beforeEach(() => {
-    mockFinancialProductsService = {
-      getFinancialProducts: jest.fn(),
-      setCurrentProduct: jest.fn(),
-      /* deleteFinancialProduct: jest.fn(), */
-    };
-    mockRouter = {
-      navigate: jest.fn(),
-    };
+  let financialProductsService: FinancialProductsService;
+  let httpMock: HttpTestingController;
 
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ProductsHomeComponent],
-      imports: [SharedModule],
+      imports: [
+        SharedModule,
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ],
       providers: [
         {
           provide: FinancialProductsService,
-          useValue: mockFinancialProductsService,
+          useClass: FinancialProductsServiceStub,
         },
-        { provide: Router, useValue: mockRouter },
       ],
-    });
+    }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(ProductsHomeComponent);
     component = fixture.componentInstance;
+    financialProductsService = TestBed.inject(FinancialProductsService);
+    httpMock = TestBed.inject(HttpTestingController);
+    fixture.detectChanges();
   });
 
-  it('should fetch financial products on initialization', () => {
-    mockFinancialProductsService.getFinancialProducts.mockReturnValue(
-      of(products)
-    );
+  it('Should get products', () => {
+    jest
+      .spyOn(financialProductsService, 'getFinancialProducts')
+      .mockReturnValue(of(mockProducts));
 
+    component.ngOnInit();
+
+    expect(component.financialProducts).toEqual(mockProducts);
+    expect(component.filteredProducts).toEqual(mockProducts);
+    expect(component.loading).toEqual(false);
+  });
+
+  it('Should change page', () => {
+    jest
+      .spyOn(financialProductsService, 'getFinancialProducts')
+      .mockReturnValue(of(mockProducts));
+
+    component.ngOnInit();
+    component.onPageChanged({ page: 2, size: 5 });
+
+    expect(component.currentPage).toBe(2);
+  });
+
+  it('Should filter on search change', () => {
+    jest
+      .spyOn(financialProductsService, 'getFinancialProducts')
+      .mockReturnValue(of(mockProducts));
+
+    component.ngOnInit();
+    component.onSearchChange('tarj-003');
+
+    expect(component.searchQuery).toEqual('tarj-003');
+    expect(component.currentPage).toEqual(1);
+    expect(component.filteredProducts[0].name).toBe('tarj-003');
+    expect(component.totalPages).toBe(1);
+  });
+
+  it('should delete a financial product', () => {
+    const productId = 'Pichincha';
+    jest
+      .spyOn(financialProductsService, 'deleteFinancialProduct')
+      .mockReturnValue(of('Deleted'));
+
+    component.deleteProduct(productId);
+
+    financialProductsService
+      .deleteFinancialProduct(productId)
+      .subscribe((data: string) => {
+        expect(data).toBe(`${productId} Deleted Successfully`);
+      });
+  });
+
+  it('should trigger click function when the anchor tag inside the dropdown is clicked for edit option', () => {
+    const dropdownToggle = fixture.debugElement.query(
+      By.css('.dropdown-toggle')
+    );
+    dropdownToggle.nativeElement.click();
     fixture.detectChanges();
 
-    expect(component.financialProducts).toEqual(products);
-    expect(component.loading).toBe(false);
+    const anchor = fixture.debugElement.query(
+      By.css('a#edit-item')
+    ).nativeElement;
+    const clickSpy = jest.spyOn(component, 'navigateToEditProduct');
+
+    anchor.click();
+
+    expect(clickSpy).toHaveBeenCalled();
   });
 
-  it('should handle errors while fetching financial products', () => {
-    mockFinancialProductsService.getFinancialProducts.mockReturnValue(
-      throwError(() => new Error('Error'))
+  it('should trigger click function when the anchor tag inside the dropdown is clicked for delete option', () => {
+    const dropdownToggle = fixture.debugElement.query(
+      By.css('.dropdown-toggle')
     );
-
+    dropdownToggle.nativeElement.click();
     fixture.detectChanges();
 
-    expect(component.error).toBe(true);
+    const anchor = fixture.debugElement.query(
+      By.css('a#delete-item')
+    ).nativeElement;
+    const clickSpy = jest.spyOn(component, 'deleteProduct');
+
+    anchor.click();
+
+    expect(clickSpy).toHaveBeenCalled();
   });
 
-  it('should filter products based on search query', () => {
-    component.financialProducts = products;
-    component.searchQuery = 'test';
+  it('should navigate to add new product when button is clicked', () => {
+    const button = fixture.debugElement.query(
+      By.css('button#add-button')
+    ).nativeElement;
+    const clickSpy = jest.spyOn(component, 'navigateToAddProduct');
 
-    component.applyFilter();
+    button.click();
+
+    expect(clickSpy).toHaveBeenCalled();
   });
 
-  it('should navigate to the add product page', () => {
-    component.navigateToAddProduct();
-
-    expect(mockRouter.navigate).toHaveBeenCalledWith([
-      '/financial-products/product-register',
-    ]);
-  });
-
-  it('should set the current product and navigate to the edit product page', () => {
-    component.navigateToEditProduct(products[0]);
-
-    expect(mockFinancialProductsService.setCurrentProduct).toHaveBeenCalledWith(
-      products[0]
-    );
-    expect(mockRouter.navigate).toHaveBeenCalledWith([
-      '/financial-products/product-register',
-    ]);
+  afterEach(() => {
+    httpMock.verify();
   });
 });
