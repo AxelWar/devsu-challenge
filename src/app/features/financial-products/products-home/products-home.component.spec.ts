@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { mockProducts } from 'src/app/shared/mocks/financial-product.mock';
 import { FinancialProductsServiceStub } from 'src/app/shared/mocks/financial-products.mock.service';
 import { FinancialProductsService } from '../../../shared/services/financial-products.service';
@@ -57,6 +57,23 @@ describe('ProductsHomeComponent', () => {
     expect(component.loading).toEqual(false);
   });
 
+  it('should handle error on fetchFinancialProducts', () => {
+    // Arrange: set up the service to return an error when getFinancialProducts is called
+    const errorResponse = new Error(
+      'An error occurred; please try again later.'
+    );
+    jest
+      .spyOn(financialProductsService, 'getFinancialProducts')
+      .mockReturnValue(throwError(() => errorResponse));
+
+    // Act: call the method
+    component.fetchFinancialProducts();
+
+    // Assert: verify that the method handled the error correctly
+    expect(component.loading).toBeFalsy();
+    expect(component.error).toBeTruthy();
+  });
+
   it('Should change page', () => {
     jest
       .spyOn(financialProductsService, 'getFinancialProducts')
@@ -66,6 +83,20 @@ describe('ProductsHomeComponent', () => {
     component.onPageChanged({ page: 2, size: 5 });
 
     expect(component.currentPage).toBe(2);
+  });
+
+  it('Should change page', () => {
+    jest
+      .spyOn(financialProductsService, 'getFinancialProducts')
+      .mockReturnValue(of(mockProducts));
+
+    component.ngOnInit();
+    component.onPageSizeChange(10);
+
+    // mockProducts haves a total of 6 products,
+    // giving a total of 2 pages with a setting of 5 items per page
+    // changing it to 10 it woll change totalPages to 1
+    expect(component.totalPages).toBe(1);
   });
 
   it('Should filter on search change', () => {

@@ -5,12 +5,9 @@ import { FinancialProductsServiceStub } from './financial-products.mock.service'
 
 describe('FinancialProductsServiceStub', () => {
   let service: FinancialProductsServiceStub;
-  // Create variables for services
-  // Create universal mocks here
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      // Add any imported components/modules here
       imports: [],
       providers: [FinancialProductsServiceStub],
     });
@@ -22,9 +19,17 @@ describe('FinancialProductsServiceStub', () => {
     jest.resetAllMocks();
   });
 
-  it('verifyFinancialProduct should...', () => {
+  it('verifyFinancialProduct should return obs true', () => {
     jest.spyOn(service, 'verifyFinancialProduct').mockReturnValue(of(false));
-    expect(service.verifyFinancialProduct('tarj-001')).toBeDefined();
+    service.verifyFinancialProduct('tarj-001').subscribe(data => {
+      expect(data).toBe(of(false));
+    });
+  });
+
+  it('verifyFinancialProduct should return obs true', () => {
+    service.verifyFinancialProduct('').subscribe(data => {
+      expect(data).toBe(of(true));
+    });
   });
 
   it('createFinancialProduct should...', () => {

@@ -67,14 +67,14 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a
-                  class="dropdown-item edit-item"
+                  class="dropdown-item edit-item clickable"
                   id="edit-item"
                   href="/financial-products/product-register"
                   (click)="navigateToEditProduct(product)"
                   >Edit</a
                 >
                 <a
-                  class="dropdown-item delete-item"
+                  class="dropdown-item delete-item clickable"
                   id="delete-item"
                   [routerLink]=""
                   (click)="deleteProduct(product.id)"

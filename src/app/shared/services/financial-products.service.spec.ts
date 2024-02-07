@@ -11,6 +11,7 @@ import { FinancialProductsService } from './financial-products.service';
 
 describe('FinancialProductsService', () => {
   let service: FinancialProductsService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -18,69 +19,73 @@ describe('FinancialProductsService', () => {
       providers: [FinancialProductsService],
     });
     service = TestBed.inject(FinancialProductsService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   it('can load instance', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('createFinancialProduct', () => {
-    it('makes expected calls', () => {
-      const httpTestingController = TestBed.inject(HttpTestingController);
-      const financialProductStub: FinancialProduct = <FinancialProduct>{};
-      service.createFinancialProduct(financialProductStub).subscribe(res => {
-        expect(res).toEqual(financialProductStub);
-      });
-      const req = httpTestingController.expectOne(
-        'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products'
-      );
-      expect(req.request.method).toEqual('POST');
-      req.flush(financialProductStub);
-      httpTestingController.verify();
+  it('makes expected calls createFinancialProduct', () => {
+    const financialProductStub: FinancialProduct = <FinancialProduct>{};
+    service.createFinancialProduct(financialProductStub).subscribe(res => {
+      expect(res).toEqual(financialProductStub);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/bp/products`
+    );
+    expect(req.request.method).toEqual('POST');
+    req.flush(financialProductStub);
+    httpTestingController.verify();
   });
 
-  describe('updateFinancialProduct', () => {
-    it('makes expected calls', () => {
-      const httpTestingController = TestBed.inject(HttpTestingController);
-      const financialProductStub: FinancialProduct = <FinancialProduct>{};
-      service.updateFinancialProduct(financialProductStub).subscribe(res => {
-        expect(res).toEqual(financialProductStub);
-      });
-      const req = httpTestingController.expectOne(
-        'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products'
-      );
-      expect(req.request.method).toEqual('PUT');
-      req.flush(financialProductStub);
-      httpTestingController.verify();
+  it('makes expected calls updateFinancialProduct', () => {
+    const financialProductStub: FinancialProduct = <FinancialProduct>{};
+    service.updateFinancialProduct(financialProductStub).subscribe(res => {
+      expect(res).toEqual(financialProductStub);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/bp/products`
+    );
+    expect(req.request.method).toEqual('PUT');
+    req.flush(financialProductStub);
+    httpTestingController.verify();
   });
 
-  describe('getFinancialProducts', () => {
-    it('makes expected calls', () => {
-      const httpTestingController = TestBed.inject(HttpTestingController);
-      service.getFinancialProducts().subscribe(res => {
-        expect(res).toEqual([]);
-      });
-      const req = httpTestingController.expectOne(
-        'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products'
-      );
-      expect(req.request.method).toEqual('GET');
-      req.flush([]);
-      httpTestingController.verify();
+  it('makes expected calls getFinancialProducts', () => {
+    service.getFinancialProducts().subscribe(res => {
+      expect(res).toEqual([]);
     });
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/bp/products`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush([]);
+    httpTestingController.verify();
+  });
+
+  it('makes DELETE calls', () => {
+    const productId = 'productId';
+    const response = 'Deleted Successfully';
+    const httpTestingController = TestBed.inject(HttpTestingController);
+    service.deleteFinancialProduct(productId).subscribe(res => {
+      expect(res).toEqual(response);
+    });
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/bp/products?id=${productId}`
+    );
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(response);
+    httpTestingController.verify();
   });
 
   it('verifyFinancialProduct should make GET request with correct URL and params', () => {
-    const httpTestingController = TestBed.inject(HttpTestingController);
     const testAuthorId = '1';
     const testProductId = 'tarj-001';
     const expectedUrl = `${environment.apiUrl}/bp/products/verification`;
 
-    // Call the service function
     service.verifyFinancialProduct(testProductId).subscribe();
 
-    // Match the request based on URL and parameters
     const reqs = httpTestingController.match(
       request =>
         request.url === expectedUrl &&
@@ -88,38 +93,30 @@ describe('FinancialProductsService', () => {
         request.params.get('id') === testProductId
     );
 
-    // Expect that one request was matched
     expect(reqs.length).toEqual(1);
 
-    // Expect that the matched request is a GET request
     const req = reqs[0];
     expect(req.request.method).toEqual('GET');
 
-    // Flush the request (simulate the response)
     req.flush({
-      /* Simulated response body */
+      mockProduct,
     });
 
-    // Verify that there are no outstanding requests
     httpTestingController.verify();
   });
 
   it('setCurrentProduct test', done => {
     const spy = jest.spyOn(service['currentProductSubject'], 'next');
 
-    // Subscribe to the subject to assert its emitted values
     service.currentProductSubject.subscribe(product => {
       expect(product).toEqual(mockProduct);
 
-      // If you used a spy, you can also assert that 'next' was called with the correct parameter
       if (spy) {
         expect(spy).toHaveBeenCalledWith(mockProduct);
       }
 
-      done(); // Complete the test when the assertion is done
+      done();
     });
-
-    // Call the method under test
     service.setCurrentProduct(mockProduct);
   });
 
@@ -127,5 +124,24 @@ describe('FinancialProductsService', () => {
     service['currentProductSubject'].next(mockProduct);
 
     expect(service.getCurrentProduct()).toEqual(mockProduct);
+  });
+
+  it('should handle HTTP error safely', () => {
+    const errorMessage = 'test 404 error';
+    const statusText = 'Not Found';
+    const status = 404;
+
+    service.getFinancialProducts().subscribe({
+      next: () => fail('should have failed with the 404 error'),
+      error: error => {
+        expect(error.message).toContain(errorMessage);
+      },
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/bp/products`
+    );
+
+    req.flush(errorMessage, { status: status, statusText: statusText });
   });
 });
