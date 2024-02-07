@@ -11,7 +11,7 @@ export class PaginationControlComponent {
   @Input() totalPages = 1;
   @Input() totalResults = 0;
   @Output() pageChanged = new EventEmitter<{ page: number; size: number }>();
-  @Output() pageSizeChange = new EventEmitter<number>(); // Declare the pageSizeChange output
+  @Output() pageSizeChange = new EventEmitter<number>();
 
   onPrevious() {
     if (this.currentPage > 1) {

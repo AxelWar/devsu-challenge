@@ -39,6 +39,7 @@
           <td class="table-data-logo">
             <img
               class="product-logo"
+              loading="lazy"
               [src]="
                 isValidUrl(product.logo)
                   ? product.logo
@@ -57,9 +58,9 @@
           <td class="table-menu">
             <div class="dropdown">
               <button
-                class="dropdown-toggle"
+                class="dropdown-toggle dropdownMenuButton"
                 type="button"
-                id="dropdownMenuButton"
+                id="dropdownMenuButton_{{ product.id }}"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false">
@@ -69,14 +70,18 @@
                 <a
                   class="dropdown-item edit-item clickable"
                   id="edit-item"
-                  href="/financial-products/product-register"
+                  role="button"
+                  tabindex="0"
+                  (keydown)="navigateToEditProduct(product)"
                   (click)="navigateToEditProduct(product)"
                   >Edit</a
                 >
                 <a
                   class="dropdown-item delete-item clickable"
                   id="delete-item"
-                  [routerLink]=""
+                  role="button"
+                  tabindex="0"
+                  (keydown)="deleteProduct(product.id)"
                   (click)="deleteProduct(product.id)"
                   >Remove</a
                 >

@@ -3,11 +3,13 @@
     class="clickable"
     role="button"
     tabindex="0"
+    aria-label="navigate to home screen if clicked"
     (keydown)="routerNavigate()"
     (click)="routerNavigate()">
     <img
+      loading="lazy"
       class="navbar-logo"
       src="../../../assets/images/bank-picture.jpg"
-      alt="Product Logo" />
+      alt="Logo from brand" />
   </a>
 </div>
