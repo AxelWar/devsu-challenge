@@ -3,12 +3,9 @@ import { LocalStorageMock } from './local-storage.mock.service';
 
 describe('LocalStorageMock', () => {
   let service: LocalStorageMock;
-  // Create variables for services
-  // Create universal mocks here
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      // Add any imported components/modules here
       imports: [],
       providers: [LocalStorageMock],
     });

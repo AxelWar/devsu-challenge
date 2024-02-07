@@ -99,9 +99,6 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
     financialProductsService: FinancialProductsService
   ): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      if (!control.value) {
-        return of(null);
-      }
       return financialProductsService
         .verifyFinancialProduct(control.value)
         .pipe(
@@ -206,7 +203,6 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
   }
 
   formatDateForInput(dateString: string): string {
-    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
   }
