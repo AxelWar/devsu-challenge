@@ -7,7 +7,7 @@
 .tooltip-icon {
   width: 20px;
   height: 20px;
-  background-color: grey;
+  background-color: #505050;
   color: white;
   text-align: center;
   line-height: 20px;
@@ -19,12 +19,12 @@
 
 .tooltip-icon-container::after {
   content: attr(data-tooltip);
-  border: 1px solid #494949;
+  border: 1px solid #505050;
   visibility: hidden;
   opacity: 0;
   width: auto;
   background-color: white;
-  color: #494949;
+  color: #505050;
   text-align: center;
   border-radius: 6px;
   padding: 1rem;

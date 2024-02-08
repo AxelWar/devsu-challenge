@@ -1,0 +1,14 @@
+<div class="dialog-overlay">
+  <div class="dialog">
+    <div class="dialog-header">Esta acción es irreversible</div>
+    <div class="dialog-content">{{ message }}</div>
+    <div class="dialog-actions">
+      <button class="dialog-button confirm-button" (click)="onConfirm()">
+        Confirmar
+      </button>
+      <button class="dialog-button cancel-button" (click)="onCancel()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

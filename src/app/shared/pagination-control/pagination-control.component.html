@@ -8,7 +8,7 @@
       id="previuos-page"
       (click)="onPrevious()"
       [disabled]="currentPage <= 1">
-      Prev
+      Anterior
     </button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
     <button
@@ -17,19 +17,20 @@
       aria-label="navigate to next page"
       (click)="onNext()"
       [disabled]="currentPage >= totalPages">
-      Next
+      Siguiente
     </button>
   </div>
 
   <div class="page-size">
     <select
       id="page-selector"
+      class="custom-select"
       name="page-selector"
       aria-label="select page size"
       (change)="onPageSizeChange($event)">
-      <option value="5">5</option>
-      <option value="10">10</option>
-      <option value="20">20</option>
+      <option class="size-value" value="5">5</option>
+      <option class="size-value" value="10">10</option>
+      <option class="size-value" value="20">20</option>
     </select>
   </div>
 </div>

@@ -1,3 +1,4 @@
+<ng-template #dialogContainer></ng-template>
 <div class="top-table">
   <div class="search-table">
     <app-search-input
@@ -74,7 +75,7 @@
                   tabindex="0"
                   (keydown)="navigateToEditProduct(product)"
                   (click)="navigateToEditProduct(product)"
-                  >Edit</a
+                  >Editar</a
                 >
                 <a
                   class="dropdown-item delete-item clickable"
@@ -83,7 +84,7 @@
                   tabindex="0"
                   (keydown)="deleteProduct(product.id)"
                   (click)="deleteProduct(product.id)"
-                  >Remove</a
+                  >Eliminar</a
                 >
               </div>
             </div>

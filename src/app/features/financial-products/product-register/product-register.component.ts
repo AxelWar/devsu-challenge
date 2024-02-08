@@ -113,7 +113,9 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
   loadEditMode() {
     const editModeStored = localStorage.getItem('productEditState');
     if (editModeStored) {
-      this.editMode = JSON.parse(editModeStored);
+      this.editMode = true;
+    } else {
+      this.editMode = false;
     }
   }
 
@@ -128,8 +130,6 @@ export class ProductRegisterComponent implements OnInit, OnDestroy {
   loadCurrentProduct() {
     const currentProduct = this.financialProductsService.getCurrentProduct();
     if (currentProduct) {
-      this.editMode = true;
-      localStorage.setItem('productEditState', JSON.stringify(this.editMode));
       this.productForm.patchValue({
         ...currentProduct,
         date_release: this.formatDateForInput(currentProduct.date_release),

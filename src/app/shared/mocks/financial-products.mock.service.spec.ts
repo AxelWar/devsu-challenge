@@ -52,4 +52,21 @@ describe('FinancialProductsServiceStub', () => {
 
     expect(service.currentProduct).toBe(mockProduct);
   });
+
+  it('should return success message when deleting a product', done => {
+    const productId = '123';
+    const expectedMessage = `${productId} Deleted Successfully`;
+
+    // Call the deleteFinancialProduct method
+    service.deleteFinancialProduct(productId).subscribe({
+      next: message => {
+        expect(message).toEqual(expectedMessage);
+        done();
+      },
+      error: () => {
+        // Fail the test if an error occurs
+        done.fail('Should not have failed!');
+      },
+    });
+  });
 });
