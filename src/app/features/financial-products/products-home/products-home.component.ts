@@ -103,6 +103,9 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     this.totalPages = Math.ceil(
       this.filteredProducts.length / this.itemsPerPage
     );
+    if (this.totalPages === 0) {
+      this.totalPages = 1;
+    }
     this.applyPagination();
   }
 
