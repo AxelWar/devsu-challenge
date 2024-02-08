@@ -1,10 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FinancialProduct } from '../../../shared/interfaces/financial-product.interface';
-import { FinancialProductsService } from '../../../shared/services/financial-products.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subject, takeUntil } from 'rxjs';
-import { emptyFinancialProduct } from '../../../shared/mocks/financial-product.mock';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { FinancialProduct } from '../../../shared/interfaces/financial-product.interface';
+import { emptyFinancialProduct } from '../../../shared/mocks/financial-product.mock';
+import { FinancialProductsService } from '../../../shared/services/financial-products.service';
 
 @Component({
   selector: 'app-products-home',
@@ -12,6 +19,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./products-home.component.scss'],
 })
 export class ProductsHomeComponent implements OnInit, OnDestroy {
+  @ViewChild('dialogContainer', { read: ViewContainerRef })
+  dialogContainerRef!: ViewContainerRef;
   private unsubscribe$ = new Subject<void>();
   financialProducts: FinancialProduct[] = [];
   loading = true;
@@ -25,6 +34,7 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   totalPages = 1;
   constructor(
     private financialProductsService: FinancialProductsService,
+    private dialogService: DialogService,
     private router: Router
   ) {}
   ngOnInit() {
@@ -111,15 +121,27 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
 
   navigateToEditProduct(product: FinancialProduct) {
     this.financialProductsService.setCurrentProduct(product);
+    localStorage.setItem('productEditState', 'true');
     this.router.navigate(['/financial-products/product-register']);
   }
 
   deleteProduct(productId: string) {
-    this.financialProductsService.deleteFinancialProduct(productId).subscribe({
-      next: () => {
-        this.fetchFinancialProducts();
-      },
-    });
+    this.dialogService
+      .open(
+        this.dialogContainerRef,
+        `¿Está seguro que desea reiniciar el formulario?`
+      )
+      .then(confirmed => {
+        if (confirmed) {
+          this.financialProductsService
+            .deleteFinancialProduct(productId)
+            .subscribe({
+              next: () => {
+                this.fetchFinancialProducts();
+              },
+            });
+        }
+      });
   }
 
   ngOnDestroy() {

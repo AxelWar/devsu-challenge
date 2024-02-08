@@ -16,13 +16,15 @@
   cursor: pointer;
   padding: 0.5rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
 }
 
 .nav-button {
   cursor: pointer;
-  margin: 0.5rem;
+  margin: 1rem;
   padding: 0.5rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  &:disabled {
+    cursor: not-allowed;
+    color: #555555;
+  }
 }

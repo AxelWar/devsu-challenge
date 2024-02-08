@@ -12,12 +12,14 @@ import { FinancialProductsServiceStub } from 'src/app/shared/mocks/financial-pro
 import { FinancialProductsService } from '../../../shared/services/financial-products.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { ProductsHomeComponent } from './products-home.component';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 
 describe('ProductsHomeComponent', () => {
   let component: ProductsHomeComponent;
   let fixture: ComponentFixture<ProductsHomeComponent>;
   let financialProductsService: FinancialProductsService;
   let httpMock: HttpTestingController;
+  let dialogService: DialogService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,6 +31,7 @@ describe('ProductsHomeComponent', () => {
         RouterTestingModule,
       ],
       providers: [
+        DialogService,
         {
           provide: FinancialProductsService,
           useClass: FinancialProductsServiceStub,
@@ -41,6 +44,7 @@ describe('ProductsHomeComponent', () => {
     fixture = TestBed.createComponent(ProductsHomeComponent);
     component = fixture.componentInstance;
     financialProductsService = TestBed.inject(FinancialProductsService);
+    dialogService = TestBed.inject(DialogService);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });
@@ -118,6 +122,7 @@ describe('ProductsHomeComponent', () => {
     jest
       .spyOn(financialProductsService, 'deleteFinancialProduct')
       .mockReturnValue(of('Deleted'));
+    jest.spyOn(dialogService, 'open').mockResolvedValue(true);
 
     component.deleteProduct(productId);
 
